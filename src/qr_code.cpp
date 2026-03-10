@@ -29,7 +29,7 @@ void setupQRCodeReader() {
  * @return The read QR Code payload
  */
 QRCodePayload readQRCode() {
-  return qrCodePayload;
+    return qrCodePayload;
 }
 
 /**
@@ -37,15 +37,15 @@ QRCodePayload readQRCode() {
  */
 void onQrCodeTask(void *pvParameters) {
     struct QRCodeData qrCodeData;
-    while (true) {
-        if (readingQRCode) {
-            if (reader.receiveQrCode(&qrCodeData, 100)) {
-                if (qrCodeData.valid) {
-                qrCodePayload.rawPayload = qrCodeData.payload;
-                qrCodePayload.payloadLength = qrCodeData.payloadLen;
-                qrCodePayload.successfulRead = true;
+    while(true) {
+        if(readingQRCode) {
+            if(reader.receiveQrCode(&qrCodeData, 100)) {
+                if(qrCodeData.valid) {
+                    qrCodePayload.rawPayload = qrCodeData.payload;
+                    qrCodePayload.payloadLength = qrCodeData.payloadLen;
+                    qrCodePayload.successfulRead = true;
                 } else {
-                qrCodePayload.successfulRead = false;
+                    qrCodePayload.successfulRead = false;
                 }
             } else {
                 qrCodePayload.successfulRead = false;
@@ -61,15 +61,15 @@ void onQrCodeTask(void *pvParameters) {
  * @param format The print format (DEC, HEX, OCT, etc.)
  */
 void printQRCodePayload(QRCodePayload qrcode, int format) {
-  if(qrcode.successfulRead) {
-    for(int i = 0; i < qrcode.payloadLength; i++) {
-      uint8_t payloadByte = qrcode.rawPayload[i];
-      if(payloadByte <= 15 && format == HEX) Serial.print("0"); /* 0 left padding for 0 to F */
-      Serial.print(payloadByte, format);
-      Serial.print(" ");
+    if(qrcode.successfulRead) {
+        for(int i = 0; i < qrcode.payloadLength; i++) {
+            uint8_t payloadByte = qrcode.rawPayload[i];
+            if(payloadByte <= 15 && format == HEX) Serial.print("0"); /* 0 left padding for 0 to F */
+            Serial.print(payloadByte, format);
+            Serial.print(" ");
+        }
+        Serial.println();
     }
-    Serial.println();
-  }
 }
 
 /**
